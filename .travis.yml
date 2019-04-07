@@ -1,0 +1,19 @@
+bundler_args: "--path vendor/bundle"
+before_install:
+  - git fetch --depth=1000000
+  # - gem install bundler
+install:
+  - brew install swiftlint
+  - bundle update
+after_install:
+
+os:
+  - osx
+osx_image:
+  - xcode10.2
+language:
+  - swift
+script:
+  - bundle exec fastlane scan
+  - bundle exec danger
+  - swiftlint
