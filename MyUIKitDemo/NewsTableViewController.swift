@@ -13,14 +13,6 @@ class NewsTableViewController: CustomRefreshTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        enableRefreshControl = true
-//        if let tableFooterView = tableView.tableFooterView {
-//            tableFooterView.addSubview(footerView())
-//        } else {
-//            tableView.tableFooterView = footerView()
-//        }
-
     }
     
     func footerView() -> UIView {
@@ -49,19 +41,29 @@ class NewsTableViewController: CustomRefreshTableViewController {
         // #warning Incomplete implementation, return the number of rows
         return 20
     }
-    
-    override func refresh(complete: @escaping () -> ()) {
+
+    override func refresh(refreshMode: CustomRefreshMode, complete: @escaping () -> ()) {
         let delayTime = DispatchTime.now() + .seconds(5)
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
-            
             complete()
         }
     }
-    
+
+    override func willShowRefreshController(_ refreshControl: CustomRefreshMode) -> Bool {
+        switch refreshControl {
+        case .pullUp:
+            return true
+        case .pullDown:
+            return true
+        case .both:
+            return false
+        }
+    }
+
     override func scrollUp(_ scrollView: UIScrollView) {
         super.scrollUp(scrollView)
     }
-    
+
     override func scrollDown(_ scrollView: UIScrollView) {
         super.scrollDown(scrollView)
     }
