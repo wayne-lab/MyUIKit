@@ -10,13 +10,10 @@ import UIKit
 import Lottie
 
 public enum LoopMode {
-    
     /// Animation is played once then stops.
     case playOnce
-    
     /// Animation will loop from end to beginning until stopped.
     case loop
-    
     /// Animation will play forward, then backwards and loop until stopped.
     case autoReverse
 }
@@ -37,18 +34,21 @@ class AnimationView: UIView, AnimationViewProtocol {
             animationView?.loopMode = toLottieLoopMode(loopMode)
         }
     }
+    var currentProgress: AnimationProgressTime {
+        return animationView?.currentProgress ?? 0
+    }
     var animationView: Lottie.AnimationView?
-    
+
     required convenience init(animation: Animation) {
         self.init(animation: animation, frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     }
-    
+
     required init(animation: Animation, frame: CGRect) {
         animationView = Lottie.AnimationView(animation: animation.animation)
         loopMode = .playOnce
         super.init(frame: frame)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         loopMode = .playOnce
         super.init(coder: aDecoder)
@@ -57,11 +57,11 @@ class AnimationView: UIView, AnimationViewProtocol {
     func play() {
         animationView?.play()
     }
-    
+
     func stop() {
         animationView?.stop()
     }
-    
+
     func play(fromProgress: AnimationProgressTime,
               toProgress: AnimationProgressTime,
               loopMode: LoopMode) {
@@ -70,7 +70,7 @@ class AnimationView: UIView, AnimationViewProtocol {
                            loopMode: toLottieLoopMode(loopMode),
                            completion: nil)
     }
-    
+
     func toLottieLoopMode(_ loopMode: LoopMode) -> Lottie.LottieLoopMode {
         switch loopMode {
         case .playOnce:
@@ -81,12 +81,12 @@ class AnimationView: UIView, AnimationViewProtocol {
             return Lottie.LottieLoopMode.autoReverse
         }
     }
-    
+
     override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         if let animationView = animationView {
             animationView.frame = bounds
             addSubview(animationView)
         }
-    }   
+    }
 }
