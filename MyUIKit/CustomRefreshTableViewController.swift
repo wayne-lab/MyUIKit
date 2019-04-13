@@ -8,17 +8,16 @@
 
 import UIKit
 
-public enum CustomRefreshMode {
-    case pullUp, pullDown, both
+public enum PullDirection {
+    case pullUp, pullDown, unknow
 }
 
 public protocol CustomRefreshTableViewControllerDelegate: UITableViewDelegate {
-    func refresh(refreshMode: CustomRefreshMode, complete: @escaping () -> ())
-    var pullMode: CustomRefreshMode { get set }
-    func willShowRefreshController(_ refreshControl: CustomRefreshMode) -> Bool
+    func refresh(pullDirection: PullDirection, complete: @escaping () -> Void)
+    func willShowRefreshController(_ pullDirection: PullDirection) -> Bool
 }
 
-open class CustomRefreshTableViewController: UITableViewController, CustomRefreshTableViewControllerDelegate {
+open class CustomRefreshTableViewController: UITableViewController {
     enum Constant {
         static let animationStartTimeFrame: CGFloat = 0.0
         static let animationEndTimeFrame: CGFloat = 0.95
@@ -28,13 +27,14 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
 
     @IBInspectable var animation: String!
     @IBInspectable var refreshControlBackgroundColor: UIColor!
+    public weak var refreshControlDelegate: CustomRefreshTableViewControllerDelegate?
     var topAnimationView: AnimationView!
     var bottomAnimationView: AnimationView!
     var topRefreshControl: UIRefreshControl? {
         get {
             return tableView.refreshControl
         }
-        
+
         set {
             tableView.refreshControl = newValue
             tableView.refreshControl?.backgroundColor = .clear
@@ -59,13 +59,11 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
     }
     var lastContentOffset: CGFloat = 0
     var progressTime: AnimationProgressTime {
-        get {
-            let topInset = UIApplication.shared.statusBarFrame.height + tableView.contentInset.top
-            let progressTime =  abs(tableView.contentOffset.y + topInset) / Constant.animationProgressTime
-            return progressTime
-        }
+        let topInset = UIApplication.shared.statusBarFrame.height + tableView.contentInset.top
+        let progressTime =  abs(tableView.contentOffset.y + topInset) / Constant.animationProgressTime
+        return progressTime
     }
-    public var pullMode: CustomRefreshMode = .both
+    public private(set) var pullDirection: PullDirection = .unknow
     var previousProgressTime: AnimationProgressTime {
         return progressTime - 0.1
     }
@@ -89,7 +87,7 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
-    
+
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         hideFooterView()
@@ -107,23 +105,16 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
         return 3
     }
 
-    open func refresh(refreshMode: CustomRefreshMode, complete: @escaping () -> ()) {
-
-    }
-
-    open func willShowRefreshController(_ refreshControl: CustomRefreshMode) -> Bool {
-        return true
-    }
-
     @objc
-    open func scrollUp(_ scrollView: UIScrollView) {
-        guard willShowRefreshController(.pullUp) else {
+    open func pullUp(_ scrollView: UIScrollView) {
+        guard refreshControlDelegate?.willShowRefreshController(.pullUp) == true else {
             return
         }
 
         let threshold   = 100.0
         let contentOffset = scrollView.contentOffset.y
-        let contentHeight = tableView.tableFooterView != nil ? scrollView.contentSize.height - tableView.tableFooterView!.bounds.height : scrollView.contentSize.height
+        let contentHeight = tableView.tableFooterView != nil ?
+            scrollView.contentSize.height - tableView.tableFooterView!.bounds.height : scrollView.contentSize.height
         let diffHeight = contentHeight - contentOffset
         let frameHeight = scrollView.bounds.size.height
         var triggerThreshold  = Float((diffHeight - frameHeight))/Float(threshold)
@@ -133,7 +124,7 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
         defer {
             lastContentOffset = CGFloat(triggerThreshold)
         }
- 
+
         addFooterView()
 
         if pullRatio >= 0.01,
@@ -175,12 +166,12 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
     }
 
     @objc
-    open func scrollDown(_ scrollView: UIScrollView) {
+    open func pullDown(_ scrollView: UIScrollView) {
         defer {
             lastContentOffset = scrollView.contentOffset.y
         }
-        
-        guard willShowRefreshController(.pullDown) == true else {
+
+        guard refreshControlDelegate?.willShowRefreshController(.pullDown) == true else {
             removeTopView()
             return
         }
@@ -188,7 +179,7 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
         addTopView()
 
         guard tableView.refreshControl?.isRefreshing == false else {
-                return
+            return
         }
 
         let progressTime = self.progressTime
@@ -206,12 +197,12 @@ open class CustomRefreshTableViewController: UITableViewController, CustomRefres
 
         if lastContentOffset > scrollView.contentOffset.y {
             topAnimationView.play(fromProgress: previousProgressTime,
-                               toProgress: progressTime,
-                               loopMode: .playOnce)
+                                  toProgress: progressTime,
+                                  loopMode: .playOnce)
         } else if lastContentOffset < scrollView.contentOffset.y {
             topAnimationView.play(fromProgress: progressTime,
-                               toProgress: previousProgressTime,
-                               loopMode: .playOnce)
+                                  toProgress: previousProgressTime,
+                                  loopMode: .playOnce)
         } else {
 
         }
@@ -240,9 +231,9 @@ extension CustomRefreshTableViewController {
 
     override open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 0 {
-            scrollDown(scrollView)
+            pullDown(scrollView)
         } else {
-            scrollUp(scrollView)
+            pullUp(scrollView)
         }
     }
 
@@ -260,35 +251,37 @@ extension CustomRefreshTableViewController {
                 hideFooterView()
                 return
         }
-        
-        var refreshMode: CustomRefreshMode = .both
+
+        var pullDirection: PullDirection = .unknow
         if topRefreshControl?.isRefreshing == true {
             topAnimationView.play()
             topAnimationView.loopMode = .loop
-            refreshMode = .pullDown
+            pullDirection = .pullDown
         } else if bottomRefreshControl?.isRefreshing == true {
             bottomAnimationView.play()
             bottomAnimationView.loopMode = .loop
             removeTopView()
-            refreshMode = .pullDown
+            pullDirection = .pullUp
         }
 
-        refresh(refreshMode: refreshMode) { [weak self] in
+        refreshControlDelegate?.refresh(pullDirection: pullDirection) { [weak self] in
 
             guard let strongSelf = self else {
                 return
             }
 
-            if strongSelf.topRefreshControl?.isRefreshing == true {
-                strongSelf.topAnimationView.stop()
-                strongSelf.topRefreshControl?.endRefreshing()
-                // Tricky part: We want to hide footer view but at this moment the top refreshcontrol doesn't hidden. So force set this flag to hide footer view in scrollViewWillBeginDragging.
-                strongSelf.tableView.tableFooterView?.isHidden = false
-            } else if strongSelf.bottomRefreshControl?.isRefreshing == true {
-                strongSelf.bottomAnimationView.stop()
-                strongSelf.bottomRefreshControl?.endRefreshing()
-                strongSelf.hideFooterView()
-                strongSelf.addTopView()
+            DispatchQueue.main.async {
+                if strongSelf.topRefreshControl?.isRefreshing == true {
+                    strongSelf.topAnimationView.stop()
+                    strongSelf.topRefreshControl?.endRefreshing()
+                    // Tricky part: We want to hide footer view but at this moment the top refreshcontrol doesn't hidden. So force set this flag to hide footer view in scrollViewWillBeginDragging.
+                    strongSelf.tableView.tableFooterView?.isHidden = false
+                } else if strongSelf.bottomRefreshControl?.isRefreshing == true {
+                    strongSelf.bottomAnimationView.stop()
+                    strongSelf.bottomRefreshControl?.endRefreshing()
+                    strongSelf.hideFooterView()
+                    strongSelf.addTopView()
+                }
             }
         }
     }

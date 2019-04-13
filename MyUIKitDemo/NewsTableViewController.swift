@@ -9,18 +9,19 @@
 import UIKit
 import MyUIKit
 
-class NewsTableViewController: CustomRefreshTableViewController {
+class NewsTableViewController: CustomRefreshTableViewController, CustomRefreshTableViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     func footerView() -> UIView {
         let rect = CGRect(x: 0, y: 0, width: view.bounds.width, height: 25)
         let footerView = UITextView(frame: rect)
         let attributedString = NSMutableAttributedString(string: "Powered by NewsAPI.org")
         let url = URL(string: "https://newsapi.org")!
-        attributedString.setAttributes([.link: url], range: NSMakeRange(11, 11))
+        attributedString.setAttributes([.link: url],
+                                       range: NSRange(location: 11, length: 11))
         footerView.attributedText = attributedString
         footerView.isUserInteractionEnabled = true
         footerView.isEditable = false
@@ -42,30 +43,22 @@ class NewsTableViewController: CustomRefreshTableViewController {
         return 20
     }
 
-    override func refresh(refreshMode: CustomRefreshMode, complete: @escaping () -> ()) {
+    func refresh(pullDirection: PullDirection,
+                 complete: @escaping () -> Void) {
         let delayTime = DispatchTime.now() + .seconds(5)
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
             complete()
         }
     }
 
-    override func willShowRefreshController(_ refreshControl: CustomRefreshMode) -> Bool {
-        switch refreshControl {
+    func willShowRefreshController(_ pullDirection: PullDirection) -> Bool {
+        switch pullDirection {
         case .pullUp:
             return true
         case .pullDown:
             return true
-        case .both:
+        case .unknow:
             return false
         }
     }
-
-    override func scrollUp(_ scrollView: UIScrollView) {
-        super.scrollUp(scrollView)
-    }
-
-    override func scrollDown(_ scrollView: UIScrollView) {
-        super.scrollDown(scrollView)
-    }
-
 }
