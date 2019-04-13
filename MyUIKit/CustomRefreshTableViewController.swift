@@ -272,12 +272,14 @@ extension CustomRefreshTableViewController {
 
             DispatchQueue.main.async {
                 if strongSelf.topRefreshControl?.isRefreshing == true {
-                    strongSelf.topAnimationView.stop()
+                    let currentProgress = strongSelf.topAnimationView.currentProgress
+                    strongSelf.topAnimationView.play(fromProgress: currentProgress, toProgress: 1, loopMode: .playOnce)
                     strongSelf.topRefreshControl?.endRefreshing()
                     // Tricky part: We want to hide footer view but at this moment the top refreshcontrol doesn't hidden. So force set this flag to hide footer view in scrollViewWillBeginDragging.
                     strongSelf.tableView.tableFooterView?.isHidden = false
                 } else if strongSelf.bottomRefreshControl?.isRefreshing == true {
-                    strongSelf.bottomAnimationView.stop()
+                    let currentProgress = strongSelf.bottomAnimationView.currentProgress
+                    strongSelf.bottomAnimationView.play(fromProgress: currentProgress, toProgress: 1, loopMode: .playOnce)
                     strongSelf.bottomRefreshControl?.endRefreshing()
                     strongSelf.hideFooterView()
                     strongSelf.addTopView()
