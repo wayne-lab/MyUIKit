@@ -69,5 +69,45 @@
             </objects>
             <point key="canvasLocation" x="1005" y="47"/>
         </scene>
+        <!--Demo View Controller-->
+        <scene sceneID="czQ-NV-J6i">
+            <objects>
+                <viewController storyboardIdentifier="DemoViewController" id="xwC-01-u00" customClass="DemoViewController" customModule="MyUIKitDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="q0Q-ic-TtY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRv-kD-FPz">
+                                <rect key="frame" x="236" y="30" width="74" height="30"/>
+                                <state key="normal" title="Dismiss"/>
+                                <connections>
+                                    <action selector="dismissTapped:" destination="xwC-01-u00" eventType="touchUpInside" id="uxo-HO-mhm"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wp3-b5-WYi">
+                                <rect key="frame" x="10" y="68" width="300" height="490"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="HDm-OU-2o2" firstAttribute="bottom" secondItem="wp3-b5-WYi" secondAttribute="bottom" constant="10" id="031-V8-SxD"/>
+                            <constraint firstItem="hRv-kD-FPz" firstAttribute="leading" secondItem="HDm-OU-2o2" secondAttribute="leading" constant="236" id="06A-Cp-BNO"/>
+                            <constraint firstItem="wp3-b5-WYi" firstAttribute="top" secondItem="hRv-kD-FPz" secondAttribute="bottom" constant="8" id="FKW-c4-rmL"/>
+                            <constraint firstItem="hRv-kD-FPz" firstAttribute="top" secondItem="HDm-OU-2o2" secondAttribute="top" constant="10" id="U7F-01-vwz"/>
+                            <constraint firstItem="HDm-OU-2o2" firstAttribute="trailing" secondItem="wp3-b5-WYi" secondAttribute="trailing" constant="10" id="nmC-dc-Y7f"/>
+                            <constraint firstItem="HDm-OU-2o2" firstAttribute="trailing" secondItem="hRv-kD-FPz" secondAttribute="trailing" constant="10" id="uyY-Yr-JRj"/>
+                            <constraint firstItem="wp3-b5-WYi" firstAttribute="leading" secondItem="HDm-OU-2o2" secondAttribute="leading" constant="10" id="zVf-yF-eJY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="HDm-OU-2o2"/>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="wp3-b5-WYi" id="0Cv-re-Fpy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zmh-vH-Tc5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1891.875" y="32.74647887323944"/>
+        </scene>
     </scenes>
 </document>

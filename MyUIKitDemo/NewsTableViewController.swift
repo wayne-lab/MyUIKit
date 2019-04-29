@@ -11,6 +11,8 @@ import MyUIKit
 
 class NewsTableViewController: CustomRefreshTableViewController, CustomRefreshTableViewControllerDelegate {
 
+    var selectedCell: UITableViewCell?
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -60,5 +62,13 @@ class NewsTableViewController: CustomRefreshTableViewController, CustomRefreshTa
         case .unknow:
             return false
         }
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let demoView = DemoViewController.initFromStoryboard() else {
+            return
+        }
+        selectedCell = tableView.cellForRow(at: indexPath)
+        present(demoView, animated: true, completion: nil)
     }
 }

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0B8EF6B226CA65B003A47DB /* ModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B8EF6A226CA65B003A47DB /* ModalAnimator.swift */; };
+		B0B8EF6D226CB1AA003A47DB /* DragDismissAnimatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B8EF6C226CB1AA003A47DB /* DragDismissAnimatorDelegate.swift */; };
+		B0B8EF6F226CBB7D003A47DB /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B8EF6E226CBB7D003A47DB /* DemoViewController.swift */; };
+		B0B8EF75226E1999003A47DB /* DismissAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B8EF74226E1999003A47DB /* DismissAnimator.swift */; };
+		B0B8EF7922736EBC003A47DB /* CutomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B8EF7822736EBC003A47DB /* CutomViewController.swift */; };
 		B0B95DD422588FD800A40158 /* MyUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0B95DCA22588FD800A40158 /* MyUIKit.framework */; };
 		B0B95DD922588FD800A40158 /* MyUIKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95DD822588FD800A40158 /* MyUIKitTests.swift */; };
 		B0B95DDB22588FD800A40158 /* MyUIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B0B95DCD22588FD800A40158 /* MyUIKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -36,6 +41,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B0B8EF6A226CA65B003A47DB /* ModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAnimator.swift; sourceTree = "<group>"; };
+		B0B8EF6C226CB1AA003A47DB /* DragDismissAnimatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDismissAnimatorDelegate.swift; sourceTree = "<group>"; };
+		B0B8EF6E226CBB7D003A47DB /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		B0B8EF74226E1999003A47DB /* DismissAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissAnimator.swift; sourceTree = "<group>"; };
+		B0B8EF7822736EBC003A47DB /* CutomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutomViewController.swift; sourceTree = "<group>"; };
 		B0B95DCA22588FD800A40158 /* MyUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0B95DCD22588FD800A40158 /* MyUIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyUIKit.h; sourceTree = "<group>"; };
 		B0B95DCE22588FD800A40158 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -90,6 +100,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B0B8EF7A227373C1003A47DB /* Transistion */ = {
+			isa = PBXGroup;
+			children = (
+				B0B8EF6A226CA65B003A47DB /* ModalAnimator.swift */,
+				B0B8EF74226E1999003A47DB /* DismissAnimator.swift */,
+				B0B8EF6C226CB1AA003A47DB /* DragDismissAnimatorDelegate.swift */,
+			);
+			path = Transistion;
+			sourceTree = "<group>";
+		};
 		B0B95DC022588FD800A40158 = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +141,8 @@
 				B0B95DFB2258903B00A40158 /* Animation.swift */,
 				B0B95DFC2258903B00A40158 /* AnimationView.swift */,
 				B0B95DFA2258903B00A40158 /* CustomRefreshTableViewController.swift */,
+				B0B8EF7822736EBC003A47DB /* CutomViewController.swift */,
+				B0B8EF7A227373C1003A47DB /* Transistion */,
 				B0B95DCD22588FD800A40158 /* MyUIKit.h */,
 				B0B95DCE22588FD800A40158 /* Info.plist */,
 			);
@@ -142,6 +164,7 @@
 				B0B95DEA2258901700A40158 /* AppDelegate.swift */,
 				B0B95DEC2258901700A40158 /* ViewController.swift */,
 				B0B95E00225890B200A40158 /* NewsTableViewController.swift */,
+				B0B8EF6E226CBB7D003A47DB /* DemoViewController.swift */,
 				B0B95DEE2258901700A40158 /* Main.storyboard */,
 				B0B95DF12258901B00A40158 /* Assets.xcassets */,
 				B0B95DF32258901B00A40158 /* LaunchScreen.storyboard */,
@@ -342,8 +365,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0B95DFD2258903B00A40158 /* CustomRefreshTableViewController.swift in Sources */,
+				B0B8EF6B226CA65B003A47DB /* ModalAnimator.swift in Sources */,
 				B0B95DFF2258903B00A40158 /* Animation.swift in Sources */,
+				B0B8EF6D226CB1AA003A47DB /* DragDismissAnimatorDelegate.swift in Sources */,
+				B0B8EF7922736EBC003A47DB /* CutomViewController.swift in Sources */,
 				B0B95DFE2258903B00A40158 /* AnimationView.swift in Sources */,
+				B0B8EF75226E1999003A47DB /* DismissAnimator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +389,7 @@
 				B0B95DED2258901700A40158 /* ViewController.swift in Sources */,
 				B0B95DEB2258901700A40158 /* AppDelegate.swift in Sources */,
 				B0B95E01225890B200A40158 /* NewsTableViewController.swift in Sources */,
+				B0B8EF6F226CBB7D003A47DB /* DemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
