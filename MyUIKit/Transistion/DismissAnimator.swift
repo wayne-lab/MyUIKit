@@ -17,8 +17,10 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromViewController = transitionContext.viewController(forKey: .from),
             let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewSnapshot = fromViewController.view.snapshotView(afterScreenUpdates: false),
-            let toViewSnapshot = toViewController.view.snapshotView(afterScreenUpdates: false) else {
+            let fromViewSnapshot = fromViewController.view.snapshotView(afterScreenUpdates: false) ??
+                 fromViewController.view.snapshotView(afterScreenUpdates: true),
+            let toViewSnapshot = toViewController.view.snapshotView(afterScreenUpdates: false) ??
+                toViewController.view.snapshotView(afterScreenUpdates: true) else {
                 transitionContext.completeTransition(true)
                 return
         }
@@ -31,12 +33,12 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let bottomLeftCorner = CGPoint(x: 0, y: screenBounds.height)
         let finalFrame = CGRect(origin: bottomLeftCorner, size: screenBounds.size)
 
-        fromViewSnapshot.alpha = 1
+//        fromViewSnapshot.alpha = 1
         let duration = transitionDuration(using: transitionContext)
         if userInteractiveDismissal {
             UIView.animate(withDuration: duration, animations: {
                 fromViewSnapshot.frame = finalFrame
-                fromViewSnapshot.alpha = 0
+//                fromViewSnapshot.alpha = 0
             }, completion: { (_) in
                 fromViewSnapshot.removeFromSuperview()
                 toViewSnapshot.removeFromSuperview()
