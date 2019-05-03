@@ -79,6 +79,9 @@ open class CustomViewController: UIViewController {
 
         switch sender.state {
         case .began:
+            guard verticalMovement > 0 else {
+                return
+            }
             transition.interactor.hasStarted = true
             self.dismiss(animated: true, completion: nil)
         case .changed:
