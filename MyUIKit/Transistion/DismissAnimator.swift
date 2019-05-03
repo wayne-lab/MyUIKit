@@ -24,9 +24,7 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             return
         }
 
-        fromViewController.view.isHidden = true
         transitionContext.containerView.addSubview(toViewSnapshot)
-        fromViewController.view.isHidden = true
         transitionContext.containerView.addSubview(fromViewSnapshot)
 
         let screenBounds = UIScreen.main.bounds
@@ -41,7 +39,6 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             }, completion: { (_) in
                 fromViewSnapshot.removeFromSuperview()
                 toViewSnapshot.removeFromSuperview()
-                fromViewController.view.isHidden = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             })
         } else {
@@ -55,7 +52,6 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             }, completion: { (_) in
                 fromViewSnapshot.removeFromSuperview()
                 toViewSnapshot.removeFromSuperview()
-                fromViewController.view.isHidden = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             })
         }
