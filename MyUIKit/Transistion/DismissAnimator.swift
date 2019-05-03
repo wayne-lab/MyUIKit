@@ -17,15 +17,13 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromViewController = transitionContext.viewController(forKey: .from),
             let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewSnapshot = fromViewController.view.snapshotView(afterScreenUpdates: false) ??
-                 fromViewController.view.snapshotView(afterScreenUpdates: true),
-            let toViewSnapshot = toViewController.view.snapshotView(afterScreenUpdates: false) ??
-                toViewController.view.snapshotView(afterScreenUpdates: true) else {
-                transitionContext.completeTransition(true)
-                return
+            let fromViewSnapshot = fromViewController.view.snapshotView(afterScreenUpdates: false) ?? fromViewController.view,
+            let toViewSnapshot = toViewController.view.snapshotView(afterScreenUpdates: false) ?? toViewController.view else
+        {
+            transitionContext.completeTransition(true)
+            return
         }
 
-        fromViewController.view.isHidden = true
         transitionContext.containerView.addSubview(toViewSnapshot)
         transitionContext.containerView.addSubview(fromViewSnapshot)
 
@@ -38,11 +36,9 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         if userInteractiveDismissal {
             UIView.animate(withDuration: duration, animations: {
                 fromViewSnapshot.frame = finalFrame
-//                fromViewSnapshot.alpha = 0
             }, completion: { (_) in
                 fromViewSnapshot.removeFromSuperview()
                 toViewSnapshot.removeFromSuperview()
-                fromViewController.view.isHidden = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             })
         } else {
@@ -56,7 +52,6 @@ public class DismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             }, completion: { (_) in
                 fromViewSnapshot.removeFromSuperview()
                 toViewSnapshot.removeFromSuperview()
-                fromViewController.view.isHidden = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             })
         }
